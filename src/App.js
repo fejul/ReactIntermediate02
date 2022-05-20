@@ -1,25 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const ApiCallClick = () => {
+	let [ simpsons, setSimpsons ] = useState({});
+	let [ apiLoaded, setApiLoaded ] = useState(false);
 
-export default App;
+	const simpsonsCall = () => {
+		fetch('https://simpsons-quotes-api.herokuapp.com/quotes').then((response) => response.json()).then((data) => {
+			setSimpsons(data);
+			setApiLoaded(true);
+		});
+	};
+
+	return (
+		<div className="centered-content">
+			<button onClick={simpsonsCall}>Click</button>
+			{apiLoaded &&
+				simpsons.map((element, index) => {
+					return (
+						<div key={index}>
+							<h2>{element.quote}</h2>
+							<h3>{element.character}</h3>
+							<img src={element.image} alt=" A picture of a simpson character" />
+						</div>
+					);
+				})}
+		</div>
+	);
+};
+
+export default ApiCallClick;
